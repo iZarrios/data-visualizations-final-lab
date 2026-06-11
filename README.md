@@ -1,46 +1,63 @@
 # F1 Data Visualization — Final Lab
 
-Unified interactive dashboard combining course visualizations over the [Ergast Formula 1 dataset](https://ergast.com/mrd/).
+Interactive Dash dashboard of Formula 1 analytics built with Plotly, using the [Ergast F1 dataset](https://ergast.com/mrd/) (`data/`).
 
-## Setup
+## Requirements
 
-```bash
-pip install -r requirements.txt
-```
+- Python **3.13+**
+- Dependencies: `pandas`, `plotly`, `dash`, `gunicorn` (see `requirements.txt`)
 
 ## Run locally
 
+### Option A — uv (recommended)
+
 ```bash
+cd data-viz-final-lab
+uv sync
+uv run python app.py
+```
+
+### Option B — pip
+
+```bash
+cd data-viz-final-lab
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 python app.py
 ```
 
-Open http://localhost:8050
+Then open **http://localhost:8050** in your browser.
+
+Press `Ctrl+C` in the terminal to stop the server.
 
 ## Deploy (Render)
 
 1. Push this repo to GitHub.
-2. Create a new **Web Service** on [Render](https://render.com) connected to the repo.
-3. Render picks up `render.yaml` automatically, or set:
-   - **Build:** `pip install -r requirements.txt`
-   - **Start:** `gunicorn app:server --bind 0.0.0.0:$PORT`
+2. Create a **Web Service** on [Render](https://render.com) linked to the repo.
+3. Render uses `render.yaml` automatically. Manual settings:
+   - **Build command:** `pip install -r requirements.txt`
+   - **Start command:** `gunicorn app:server --bind 0.0.0.0:$PORT`
 
 ## Project structure
 
 ```
-data/              Canonical CSV dataset
+data/              Ergast CSV files
 src/
   theme.py         Shared cream Plotly theme
   data_loader.py   Cached data loaders
   figures/         One module per visualization
 app.py             Dash entry point
+requirements.txt
+render.yaml        Render deployment config
 ```
 
-## Visualizations
+## Dashboard contents
 
 - Calendar volume & scheduling density
 - Classic circuit presence matrix
 - Classic vs modern venue share
-- Geographic evolution (interactive decade slider)
+- Geographic evolution (decade slider)
 - Nationality diversification (Q2.1)
 - Regional talent influx (Q2.2)
 - Avg races per driver per team (Q2.4)
