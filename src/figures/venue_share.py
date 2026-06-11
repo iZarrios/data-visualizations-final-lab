@@ -50,7 +50,10 @@ def build_figure() -> go.Figure:
             title=dict(text="<b>Circuit Type</b>"),
             x=0.02, y=0.98,
         ),
+        dragmode=False,
         margin=dict(l=100, r=100, t=120, b=80),
     )
     fig.update_traces(marker=dict(line=dict(color=COLORS["text_dark"], width=0.5)))
+    fig.update_xaxes(fixedrange=True)
+    fig.update_yaxes(fixedrange=True)
     return fig

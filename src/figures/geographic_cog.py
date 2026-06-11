@@ -96,8 +96,11 @@ def build_timeline_figure(selected_decade: int) -> go.Figure:
         xaxis_title="Decade",
         yaxis_title="Total Races Held",
         legend=dict(title="Region"),
+        dragmode=False,
         margin=dict(t=80, b=60, l=70, r=30),
     )
+    fig.update_xaxes(fixedrange=True)
+    fig.update_yaxes(fixedrange=True)
     return fig
 
 

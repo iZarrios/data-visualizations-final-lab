@@ -109,7 +109,7 @@ app.layout = html.Div(
                     [
                         _graph(build_calendar_volume()),
                         _graph(build_circuit_presence()),
-                        _graph(build_venue_share()),
+                        _graph(build_venue_share(), config=STATIC_GRAPH_CONFIG),
                     ],
                 ),
                 _section(
@@ -121,7 +121,7 @@ app.layout = html.Div(
                             children=[
                                 html.Div(
                                     style={**CARD_STYLE, "flex": "1 1 45%"},
-                                    children=[dcc.Graph(id="cog-timeline", config=GRAPH_CONFIG)],
+                                    children=[dcc.Graph(id="cog-timeline", config=STATIC_GRAPH_CONFIG)],
                                 ),
                                 html.Div(
                                     style={**CARD_STYLE, "flex": "1 1 45%"},
