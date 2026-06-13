@@ -238,8 +238,8 @@ app.layout = html.Div([
                         "Calendar & Circuits",
                         "How the championship schedule grew in volume, density, and geographic breadth.",
                         [
-                            _graph(build_calendar_volume()),
-                            _graph(build_circuit_presence()),
+                            _graph(build_calendar_volume(), config=STATIC_GRAPH_CONFIG),
+                            _graph(build_circuit_presence(), config=STATIC_GRAPH_CONFIG),
                             _graph(build_venue_share(), config=STATIC_GRAPH_CONFIG),
                         ],
                     ),
