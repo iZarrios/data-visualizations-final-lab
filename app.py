@@ -388,7 +388,7 @@ app.layout = html.Div([
                         className="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4",
                         children=[
                             html.P(
-                                "© 2026 F1 Data Visualization | Team 3 | Data Visualization Lab",
+                                "© 2026 F1 Data Visualization | Team 3 | INF8808E (E2026) - Data visualization",
                                 className="text-gray-400 text-sm",
                             ),
                             html.A(
