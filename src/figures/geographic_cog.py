@@ -145,6 +145,7 @@ def build_globe_figure(selected_decade: int) -> go.Figure:
         height=480,
         geo=dict(
             projection_type="orthographic",
+            projection_scale=2.2,  # Prevent zooming out too far (higher = more zoomed in)
             showland=True,
             landcolor="#EDE8DF",
             showocean=True,
