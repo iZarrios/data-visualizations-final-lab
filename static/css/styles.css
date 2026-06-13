@@ -1,0 +1,145 @@
+/* ========================================
+   F1 Data Viz — Premium Racing Theme
+   Custom styles for Dash Dashboard
+   ======================================== */
+
+/* Smooth scrolling for the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Racing stripe accent line */
+.racing-stripe {
+  position: relative;
+}
+
+.racing-stripe::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #D62728 33%, #1F77B4 33%, #1F77B4 66%, #FF7F0E 66%);
+}
+
+/* Card hover effect - subtle lift */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Navbar blur backdrop */
+.navbar-blur {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Section fade-in animation (quick) */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-section {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* Gradient text for hero title */
+.gradient-text {
+  background: linear-gradient(135deg, #D62728 0%, #1F77B4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F8F7F3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D3D3D3;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A0A0A0;
+}
+
+/* Navbar link active state with indicator */
+.nav-link {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #D62728;
+  transition: width 0.2s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Hero title glow effect */
+.hero-glow {
+  text-shadow: 0 0 40px rgba(214, 39, 40, 0.15);
+}
+
+/* Slider track styling override */
+.custom-slider .slider-track {
+  background: #D3D3D3 !important;
+  height: 6px !important;
+  border-radius: 3px !important;
+}
+
+.custom-slider .slider-thumb {
+  background: #D62728 !important;
+  width: 18px !important;
+  height: 18px !important;
+  box-shadow: 0 2px 8px rgba(214, 39, 40, 0.4) !important;
+}
+
+.custom-slider .slider-thumb:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+/* Section badge styling */
+.section-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, rgba(214, 39, 40, 0.1) 0%, rgba(31, 119, 180, 0.1) 100%);
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2C2C2C;
+  margin-bottom: 16px;
+}
+
+/* Quick transition for all interactive elements */
+.interactive {
+  transition: all 0.2s ease;
+}
