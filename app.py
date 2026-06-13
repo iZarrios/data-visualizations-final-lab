@@ -80,6 +80,7 @@ app.index_string = f'''
     {{%metas%}}
     <title>F1 Historical Analytics — Team 3</title>
     {{%favicon%}}
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='50' fill='%23D62728'/><rect y='50' width='100' height='50' fill='%231F77B4'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white' font-family='Arial'>🏎️</text></svg>"/>
     {{%css%}}
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -116,7 +117,7 @@ app.index_string = f'''
 app.layout = html.Div([
     # Store for tracking active section
     dcc.Store(id='active-section', data='calendar'),
-    
+
     # Fixed Navbar
     html.Nav(
         className="fixed top-0 left-0 right-0 bg-white/95 navbar-blur shadow-md z-50 border-b border-gray-200",
@@ -133,12 +134,21 @@ app.layout = html.Div([
                                 className="flex items-center gap-3 group",
                                 children=[
                                     html.Div(
-                                        className="w-10 h-10 bg-gradient-to-br from-f1-red to-f1-blue rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md group-hover:shadow-lg transition-shadow interactive",
+                                        className="w-12 h-12 bg-gradient-to-br from-f1-red via-white to-f1-blue rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow interactive border-2 border-gray-800",
                                         children="🏁"
                                     ),
-                                    html.Span(
-                                        "F1 Analytics",
-                                        className="text-xl font-bold text-gray-800 group-hover:text-f1-red transition-colors"
+                                    html.Div(
+                                        className="flex flex-col",
+                                        children=[
+                                            html.Span(
+                                                "F1 Analytics",
+                                                className="text-lg font-extrabold text-gray-800 group-hover:text-f1-red transition-colors leading-tight"
+                                            ),
+                                            html.Span(
+                                                "Historical Data Lab",
+                                                className="text-xs text-gray-500 font-medium -mt-1"
+                                            ),
+                                        ]
                                     ),
                                 ],
                             ),
@@ -155,21 +165,14 @@ app.layout = html.Div([
                                     for i, section in enumerate(SECTIONS)
                                 ],
                             ),
-                            # CTA / Back to top
-                            html.A(
-                                href="#calendar",
-                                className="hidden md:inline-flex items-center px-4 py-2 bg-gradient-to-r from-f1-red to-f1-blue text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg interactive transform hover:-translate-y-0.5",
-                                children=[
-                                    html.Span("📊 Dashboard"),
-                                ],
-                            ),
+
                         ],
                     ),
                 ],
             ),
         ],
     ),
-    
+
     # Main Content (with top padding for fixed navbar)
     html.Div(
         className="pt-28 pb-16",
@@ -227,7 +230,7 @@ app.layout = html.Div([
                     ),
                 ],
             ),
-            
+
             # Sections Container
             html.Div(
                 className="max-w-7xl mx-auto px-6",
@@ -316,7 +319,7 @@ app.layout = html.Div([
             ),
         ],
     ),
-    
+
     # Footer
     html.Footer(
         className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-12 mt-20",
@@ -334,7 +337,7 @@ app.layout = html.Div([
                                         className="flex items-center gap-3 mb-4",
                                         children=[
                                             html.Div(
-                                                className="w-10 h-10 bg-gradient-to-br from-f1-red to-f1-blue rounded-lg flex items-center justify-center text-white font-bold",
+                                                className="w-12 h-12 bg-gradient-to-br from-f1-red via-white to-f1-blue rounded-lg flex items-center justify-center shadow-md border-2 border-gray-700",
                                                 children="🏁"
                                             ),
                                             html.Span("F1 Analytics", className="text-xl font-bold"),
@@ -388,7 +391,7 @@ app.layout = html.Div([
                         className="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4",
                         children=[
                             html.P(
-                                "© 2026 F1 Data Visualization | Team 3 | INF8808E (E2026) - Data visualization",
+                                "INF8808E (E2026) - Data visualization | Team 3",
                                 className="text-gray-400 text-sm",
                             ),
                             html.A(
