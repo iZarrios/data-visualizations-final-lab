@@ -143,3 +143,35 @@ html {
 .interactive {
   transition: all 0.2s ease;
 }
+
+/* Insight box styling */
+ul li.pl-4 {
+  position: relative;
+}
+
+ul li.pl-4::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: #D62728;
+}
+
+/* Visualization card title emphasis */
+h4.text-xl.font-bold {
+  color: #2C2C2C;
+}
+
+/* Insight box gradient background */
+.bg-gradient-to-r.from-gray-50.to-gray-100 {
+  border-radius: 8px;
+}
+
+/* Bullet point hover effect */
+ul li.pl-4.border-l-2 {
+  transition: transform 0.2s ease, padding-left 0.2s ease;
+}
+
+ul li.pl-4.border-l-2:hover {
+  transform: translateX(4px);
+  padding-left: 1rem !important;
+}

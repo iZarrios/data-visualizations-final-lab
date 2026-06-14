@@ -54,6 +54,34 @@ def _graph(figure, *, config: dict | None = None):
     )
 
 
+def _viz_card(title: str, description: str, figure_component, insights: list[str]):
+    """Create a visualization card with title, description, graph, and insights."""
+    return html.Div(
+        className="bg-white rounded-lg p-6 mb-8 shadow-md card-hover border-l-4 border-f1-red",
+        children=[
+            html.H4(className="text-xl font-bold text-gray-800 mb-3", children=title),
+            html.P(
+                className="text-gray-600 mb-4 leading-relaxed",
+                children=description,
+            ),
+            figure_component,
+            html.Div(
+                className="mt-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-5 border border-gray-200",
+                children=[
+                    html.H5(
+                        className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2",
+                        children=[html.Span("💡"), html.Span("Key Insights")],
+                    ),
+                    html.Ul(
+                        className="space-y-2 text-gray-700",
+                        children=[html.Li(children=insight, className="pl-4 border-l-2 border-f1-blue") for insight in insights],
+                    ),
+                ],
+            ),
+        ],
+    )
+
+
 def _section(section_id: str, section_badge: str, title: str, blurb: str, children: list):
     return html.Div(
         id=section_id,
@@ -241,32 +269,60 @@ app.layout = html.Div([
                         "Calendar & Circuits",
                         "How the championship schedule grew in volume, density, and geographic breadth.",
                         [
-                            _graph(build_calendar_volume(), config=STATIC_GRAPH_CONFIG),
-                            _graph(build_circuit_presence(), config=STATIC_GRAPH_CONFIG),
-                            _graph(build_venue_share(), config=STATIC_GRAPH_CONFIG),
+                            _viz_card(
+                                "F1 Championship Evolution: Annual Volume & Scheduling Density",
+                                "This dual-axis visualization tracks how Formula 1 has evolved from a modest championship with fewer races to today's global marathon. The blue line shows the growing number of races per season (volume), while the orange area reveals scheduling density. The data shows dramatic expansion: from an average of 8.4 races per season in the 1950s to 21.4 races in the 2020s - more than doubling the calendar size over seven decades.",
+                                _graph(build_calendar_volume(), config=STATIC_GRAPH_CONFIG),
+                                [
+                                    "F1 grew from 7 races in 1950 (first season) to a record 24 races in 2024",
+                                    "Average calendar size: 8.4 races/season (1950s) → 21.4 races/season (2020s) - nearly triple the volume",
+                                    "Exponential growth accelerated in the 2000s and continues through today with constant new market additions",
+                                    "The expanded calendar creates logistical challenges as teams race on 5 continents within single seasons",
+                                ],
+                            ),
+                            _viz_card(
+                                "Classic F1 Circuits: Historical Presence & Displacement Matrix",
+                                "This heatmap reveals the heritage tracks that defined Formula 1's early years (1950-1960). Each row represents a classic circuit, and blue squares indicate when that track hosted a race. The matrix shows how legendary circuits like Monaco (70 races), Monza (74 races), and Silverstone (59 races) have appeared most frequently throughout history, though with intermittent gaps. Many early venues were one-off races or hosted only occasionally during F1's formative era.",
+                                _graph(build_circuit_presence(), config=STATIC_GRAPH_CONFIG),
+                                [
+                                    "Monaco, Monza, and Silverstone are the most persistent classic circuits but all have hosting gaps over the decades",
+                                    "20 different circuits hosted races during the 1950-1960 golden era, but many disappeared quickly",
+                                    "European circuits dominated early F1 before global expansion brought racing to other continents",
+                                    "Tracks that survived longer (Monaco since 1950, Monza since 1950) became institutional pillars of the sport",
+                                ],
+                            ),
+                            _viz_card(
+                                "F1 Calendar Evolution: Classic vs Modern Venue Share by Decade",
+                                "This stacked bar chart compares how F1's venue composition has changed over seven decades. Purple bars represent races at classic tracks (those existing in 1950-1960), while blue bars show modern and new venues. The dramatic shift from purple to blue tells the story of F1's transformation: from 100% classic tracks in the 1950s to just 21-23% by the 2010s-2020s, reflecting a fundamental restructuring of the championship.",
+                                _graph(build_venue_share(), config=STATIC_GRAPH_CONFIG),
+                                [
+                                    "The 1950s calendar was 100% classic tracks (84 races total across all venues)",
+                                    "Modern venues took majority dominance by the 1970s (66.7%), not the 1990s as commonly assumed",
+                                    "Classic track share declined steadily: 66% (1960s) → 33% (1970s) → ~25% (1980s-2000s) → ~22% (2010s-2020s)",
+                                    "The total calendar has grown from 84 races in the 1950s to nearly 200 per decade in recent years",
+                                ],
+                            ),
                         ],
                     ),
-                    _section(
-                        "geographic",
-                        "🌍",
-                        "Geographic Evolution",
-                        "Race hosting by region and the spherical center of gravity path through time.",
-                        [
+                    _viz_card(
+                        "Geographic Evolution: Regional Race Distribution & Center of Gravity",
+                        "This dual visualization explores how F1 has transformed from a European-centric championship into a truly global sport. The stacked bar chart shows race distribution across world regions by decade, revealing the emergence of new markets. The interactive globe displays actual circuit locations (dots sized by races hosted) and traces the spherical center of gravity - a weighted average position that literally tracks how F1's geographic focus has shifted over time as the dashed line moves across the map.",
+                        html.Div([
                             html.Div(
-                                className="flex gap-4 flex-wrap",
+                                className="flex gap-4 flex-wrap mb-6",
                                 children=[
                                     html.Div(
-                                        className="flex-1 min-w-[45%] bg-white rounded-lg p-3 shadow-sm card-hover interactive",
+                                        className="flex-1 min-w-[45%] bg-gray-50 rounded-lg p-3 shadow-sm border border-gray-200",
                                         children=[dcc.Graph(id="cog-timeline", config=STATIC_GRAPH_CONFIG)],
                                     ),
                                     html.Div(
-                                        className="flex-1 min-w-[45%] bg-white rounded-lg p-3 shadow-sm card-hover interactive",
+                                        className="flex-1 min-w-[45%] bg-gray-50 rounded-lg p-3 shadow-sm border border-gray-200",
                                         children=[dcc.Graph(id="cog-globe", config=GRAPH_CONFIG)],
                                     ),
                                 ],
                             ),
                             html.Div(
-                                className="mt-6 px-4 py-3 bg-white rounded-lg shadow-sm",
+                                className="px-4 py-3 bg-white rounded-lg shadow-sm border border-gray-200",
                                 children=[
                                     html.Label(
                                         "Show data up to decade:",
@@ -283,16 +339,63 @@ app.layout = html.Div([
                                     ),
                                 ],
                             ),
+                        ]),
+                        [
+                            "Europe's dominance has gradually declined as Middle East, Asia-Pacific, and Americas regions expanded",
+                            "The center of gravity path visually demonstrates F1's expansion eastward and southward over decades",
+                            "Middle Eastern races (Bahrain, Abu Dhabi, Saudi Arabia) represent the newest wave of growth since 2000s",
+                            "Interactive slider lets you see how the geographic center shifted with each era of expansion",
+                        ],
+                    ),
+
+                    html.Div(className="my-8 border-t-2 border-dashed border-gray-300"),
+
+                    _section(
+                        "geographic",
+                        "🌍",
+                        "Geographic Evolution (Detailed View)",
+                        "Interactive exploration of race hosting patterns and center of gravity evolution.",
+                        [
+                            html.Div(
+                                className="bg-white rounded-lg p-6 border-l-4 border-f1-blue",
+                                children=[
+                                    html.H5("🗺️ What You're Seeing", className="text-lg font-semibold mb-3"),
+                                    html.P(
+                                        "The timeline chart above stacks races by region, showing how the championship balanced its global presence. The globe visualization uses 3D orthographic projection with circuit markers sized by frequency of hosting. The dashed line traces the mathematical center of gravity - calculated using spherical coordinates weighted by race count - which physically moves as new circuits are added in different parts of the world.",
+                                        className="text-gray-600 mb-4",
+                                    ),
+                                ],
+                            ),
                         ],
                     ),
                     _section(
                         "nationality",
                         "👥",
                         "Nationality & Talent",
-                        "Structural diversification and regional waves of drivers on the grid.",
+                        "Structural diversification and regional waves of talent influx on the grid.",
                         [
-                            _graph(build_viz8()),
-                            _graph(build_viz9()),
+                            _viz_card(
+                                "Structural Global Diversification: Driver & Constructor Nationalities Over Time",
+                                "This line chart tracks F1's globalization by counting unique nationalities among drivers (cyan area) and constructors/team origins (orange area) each decade. Unlike expected steady growth, the data reveals surprisingly stable driver nationality counts from 1950s-2020s (hovering around 21-26), while constructor nationalities peaked in 1970s at 14 then declined. The gap shows global talent distributed among European-based teams.",
+                                _graph(build_viz8()),
+                                [
+                                    "Driver nationalities remained remarkably stable: 21 (1950s) to 26 (2010s peak), not the dramatic increase expected",
+                                    "Constructor diversity peaked at 14 unique nationalities in the 1970s, then declined to 7-11 in recent decades",
+                                    "British constructors dominate overwhelmingly (12,239 entries) vs Italian (5,732), French (2,414), others much less",
+                                    "The gap between driver and constructor diversity reflects F1's structure: global talent pool but team headquarters concentrated in Europe (Motorhome Valley UK)",
+                                ],
+                            ),
+                            _viz_card(
+                                "Geopolitical Waves of Talent Influx by Region",
+                                "This area chart shows the composition of drivers on the grid by their geographic region of origin through history. Each colored band represents a region with thickness indicating driver appearances per season. Contrary to intuition, Western Europe did NOT consistently dominate early decades - North America represented 42.6% of drivers in the 1950s! Latin America's prominence peaked in the 2000s (16.9%), while Western Europe's dominance grew over time to reach ~70% by the 1990s.",
+                                _graph(build_viz9()),
+                                [
+                                    "1950s was most diverse era: Western Europe only 49.3%, North America 42.6% - completely different from today's grid!",
+                                    "Western Europe's share grew steadily: 49% (1950s) → 78% (1980s-1990s) → ~65% (2020s)",
+                                    "Latin America peaked in the 2000s at 16.9% of all driver appearances, down from 11-13% in 1980s-2010s",
+                                    "North America's presence dramatically declined: 43% (1950s) → under 2% (2010s-2020s), explaining US market struggles",
+                                ],
+                            ),
                         ],
                     ),
                     _section(
@@ -301,8 +404,28 @@ app.layout = html.Div([
                         "Competition Dynamics",
                         "Team driver utilization and win dominance across eras.",
                         [
-                            _graph(build_q24()),
-                            _graph(build_q31(), config=STATIC_GRAPH_CONFIG),
+                            _viz_card(
+                                "Driver Retention & Team Stability: Average Races per Driver per Decade",
+                                "This box plot reveals how driver tenure with teams has evolved across F1 history. The data shows a dramatic shift in stability: from 1.9 average races per driver per team in the 1950s to 38 races in the 2010s-2020s. This twenty-fold increase reflects both longer driver careers and expanded seasons. Ferrari and Mercedes have shown exceptional retention, with drivers completing 58-99 races per team in recent decades.",
+                                _graph(build_q24()),
+                                [
+                                    "Average races per driver increased 20x: 1.9 (1950s) → 38.0 (2010s) - a fundamental shift in team stability",
+                                    "Ferrari dominated retention historically: 7.5 races/driver (1950s), 28.6 (1970s), 58.0 (2000s)",
+                                    "Modern extremes show Mercedes and Red Bull at 71.3 races/driver (2020s) vs. minimum of 11.3 - huge variation",
+                                    "1970s-1980s marked the turning point when seasons expanded and driver contracts became longer-term",
+                                ],
+                            ),
+                            _viz_card(
+                                "Driver vs Constructor Win Dominance: A Heatmap Comparison by Decade",
+                                "This dual heat map reveals the concentration of race wins among top performers. The data shows remarkable patterns: Schumacher's 62 wins in the 2000s (Ferrari), Hamilton's 73 wins in the 2010s, and Verstappen's 55 wins in the 2020s represent extreme driver dominance. Constructor-wise, Ferrari's historical supremacy (249 total wins) and Mercedes' 93 wins in the 2010s show how organizational excellence can define entire eras.",
+                                _graph(build_q31(), config=STATIC_GRAPH_CONFIG),
+                                [
+                                    "Schumacher-Ferrari 2000s: 62 driver wins + 85 constructor wins = most dominant single-decade combination in F1 history",
+                                    "Hamilton-Mercedes 2010s: 73 driver wins (all-time decade record) paired with Mercedes' 93 constructor wins",
+                                    "Ferrari is the only team to win in every decade from 1950s-2020s - unmatched consistency across 70+ years",
+                                    "1980s was actually dominated by Prost (39 wins) and McLaren (56 wins), not as competitive as traditionally remembered",
+                                ],
+                            ),
                         ],
                     ),
                     _section(
@@ -311,8 +434,28 @@ app.layout = html.Div([
                         "Performance & Demographics",
                         "Pit-lane pace evolution and shifting driver age profiles.",
                         [
-                            _graph(build_q33()),
-                            _graph(build_q41(), config=STATIC_GRAPH_CONFIG),
+                            _viz_card(
+                                "Pit-Lane Excellence: Team Strategy & Pace Evolution (2011+)",
+                                "This line chart tracks the evolution of pit-stop performance since 2011, when detailed pit data became consistently available. The dark line represents the field median pit time each season. Contrary to expected continuous improvement, median pit times have remained remarkably stable around 23-24 seconds from 2011-2024, starting at 22.37s (2011) and ending at 23.29s (2024). This plateau suggests teams have reached optimal efficiency limits or that regulation changes balance any gains.",
+                                _graph(build_q33()),
+                                [
+                                    "Median pit times plateaued around 23-24 seconds since 2011, not continuously improving as expected",
+                                    "2014-2015 saw the slowest median times (24.22s, 24.25s) possibly due to fuel flow or safety regulation changes",
+                                    "Best year was 2012 at 22.26s - surprisingly, recent years have not surpassed this performance",
+                                    "Consistent field of 600-1100 pit stops per year shows data reliability for meaningful trend analysis",
+                                ],
+                            ),
+                            _viz_card(
+                                "Driver Age Evolution: How the Grid's Demographics Have Shifted Across Decades",
+                                "This violin plot shows the age distribution of drivers competing in each decade. The data reveals a clear trend: F1 drivers are getting significantly younger. The median age has dropped from 34.7 years in the 1950s to just 26.7 years in the 2020s - an 8-year decrease! Youngest-ever race entries appeared in 2015 (Max Verstappen at 17.5 years), marking a new era of teenage prodigies entering F1.",
+                                _graph(build_q41(), config=STATIC_GRAPH_CONFIG),
+                                [
+                                    "Median driver age declined dramatically: 34.7y (1950s) → 26.7y (2020s) - the grid is nearly a decade younger!",
+                                    "1950s drivers were oldest: median 34.7 years, minimum 20.2 years - very different from today's teenage debuts",
+                                    "Youngest race entry: Max Verstappen at 17.5 years old (2015) - first driver under 18 in modern era",
+                                    "Age range has expanded: modern F1 sees drivers from 17.5 to 43+ years, reflecting both younger debuts and longer careers",
+                                ],
+                            ),
                         ],
                     ),
                 ],
