@@ -106,7 +106,7 @@ app.index_string = f'''
 <html>
 <head>
     {{%metas%}}
-    <title>F1 Historical Analytics — Team 3</title>
+    <title>F1 Historical Analytics - Team 3</title>
     {{%favicon%}}
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='50' fill='%23D62728'/><rect y='50' width='100' height='50' fill='%231F77B4'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white' font-family='Arial'>🏎️</text></svg>"/>
     {{%css%}}
@@ -209,46 +209,137 @@ app.layout = html.Div([
             html.Section(
                 className="relative overflow-hidden mb-16",
                 children=[
-                    # Subtle background pattern
+                    # Subtle background pattern with racing theme
                     html.Div(
-                        className="absolute inset-0 bg-gradient-to-br from-f1-red/5 via-transparent to-f1-blue/5",
+                        className="absolute inset-0 bg-gradient-to-br from-f1-red/10 via-transparent to-f1-blue/10",
+                    ),
+                    # Decorative racing elements
+                    html.Div(
+                        className="absolute top-20 left-10 w-32 h-32 bg-f1-red/5 rounded-full blur-3xl",
+                    ),
+                    html.Div(
+                        className="absolute bottom-10 right-10 w-48 h-48 bg-f1-blue/5 rounded-full blur-3xl",
                     ),
                     html.Div(
                         className="max-w-7xl mx-auto px-6 relative z-10",
                         children=[
                             # Hero content
                             html.Div(
-                                className="text-center py-8 fade-in-section",
+                                className="text-center py-12 fade-in-section",
                                 children=[
+                                    html.Div(
+                                        className="inline-block px-4 py-2 bg-gradient-to-r from-f1-red/10 to-f1-blue/10 rounded-full border border-gray-300 mb-6",
+                                        children=[
+                                            html.Span(className="text-sm font-semibold text-gray-700"),
+                                            "🏁 Explore 74 Years of F1 History"
+                                        ],
+                                    ),
                                     html.H1(
-                                        "Formula 1 Historical Analytics",
-                                        className="text-5xl md:text-6xl font-extrabold mb-4 hero-glow gradient-text",
+                                        ["Beyond the Checkered Flag: ", html.Br(), "F1 Data Decoded"],
+                                        className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 hero-glow text-f1-red",
                                     ),
                                     html.P(
-                                        "Interactive exploration of championship calendars, global talent flows, team dynamics, and performance trends across seven decades of F1 racing.",
-                                        className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed",
+                                        [
+                                            "Discover the hidden stories behind Formula 1's greatest legends, dominant teams, and paradigm shifts. ",
+                                            "From ", html.Span(className="font-bold text-f1-red"), "Schumacher's Ferrari dynasty", html.Span(className="font-normal"),
+                                            " to ", html.Span(className="font-bold text-f1-blue"), "Hamilton's record-breaking reign", html.Span(className="font-normal"),
+                                            ", explore how the sport transformed from a ",
+                                            html.Span(className="font-bold text-f1-orange"), "49% European driver field in 1950", html.Span(className="font-normal"),
+                                            " to today's global talent showcase. Uncover surprises:",
+                                        ],
+                                        className="text-xl text-gray-700 max-w-4xl mx-auto mb-8 leading-relaxed",
                                     ),
-                                    # Quick stats badges
+                                    # Curiosity hooks
+                                    html.Div(
+                                        className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto mb-10",
+                                        children=[
+                                            html.Div(
+                                                className="bg-white rounded-xl shadow-md p-6 border-l-4 border-f1-red hover:shadow-lg transition-shadow interactive",
+                                                children=[
+                                                    html.H3(className="text-3xl font-bold text-f1-red mb-2"), "🏆",
+                                                    html.P(
+                                                        "Which driver won the MOST races in a single decade? (Hint: Not who you think)",
+                                                        className="text-sm text-gray-700 font-medium leading-relaxed",
+                                                    ),
+                                                ],
+                                            ),
+                                            html.Div(
+                                                className="bg-white rounded-xl shadow-md p-6 border-l-4 border-f1-blue hover:shadow-lg transition-shadow interactive",
+                                                children=[
+                                                    html.H3(className="text-3xl font-bold text-f1-blue mb-2"), "🎂",
+                                                    html.P(
+                                                        "Drivers are 8 YEARS younger now than in the 1950s — what changed?",
+                                                        className="text-sm text-gray-700 font-medium leading-relaxed",
+                                                    ),
+                                                ],
+                                            ),
+                                            html.Div(
+                                                className="bg-white rounded-xl shadow-md p-6 border-l-4 border-f1-orange hover:shadow-lg transition-shadow interactive",
+                                                children=[
+                                                    html.H3(className="text-3xl font-bold text-f1-orange mb-2"), "🌍",
+                                                    html.P(
+                                                        "North America had 43% of F1 drivers in the 1950s... now it's under 2%. Why?",
+                                                        className="text-sm text-gray-700 font-medium leading-relaxed",
+                                                    ),
+                                                ],
+                                            ),
+                                            html.Div(
+                                                className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow interactive",
+                                                children=[
+                                                    html.H3(className="text-3xl font-bold text-green-500 mb-2"), "⚡",
+                                                    html.P(
+                                                        "Pit stops haven't gotten faster since 2012 — here's why teams plateaued",
+                                                        className="text-sm text-gray-700 font-medium leading-relaxed",
+                                                    ),
+                                                ],
+                                            ),
+                                        ],
+                                    ),
+                                    # Quick stats badges with actual numbers
                                     html.Div(
                                         className="flex flex-wrap justify-center gap-4 mt-6",
                                         children=[
                                             html.Div(
-                                                className="px-6 py-3 bg-white rounded-xl shadow-sm border border-gray-200",
+                                                className="px-6 py-4 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow interactive group",
                                                 children=[
-                                                    html.Span(className="text-2xl font-bold text-f1-red"), "🏎️ 7+ Decades"
-                                                ]
+                                                    html.Span(className="text-3xl font-extrabold text-f1-red block"), "74",
+                                                    html.Small(className="text-gray-600 font-medium"), "Years of Data (1950-2024)",
+                                                ],
                                             ),
                                             html.Div(
-                                                className="px-6 py-3 bg-white rounded-xl shadow-sm border border-gray-200",
+                                                className="px-6 py-4 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow interactive group",
                                                 children=[
-                                                    html.Span(className="text-2xl font-bold text-f1-blue"), "📈 10+ Visualizations"
-                                                ]
+                                                    html.Span(className="text-3xl font-extrabold text-f1-blue block"), "1,118",
+                                                    html.Small(className="text-gray-600 font-medium"), "Races Analyzed",
+                                                ],
                                             ),
                                             html.Div(
-                                                className="px-6 py-3 bg-white rounded-xl shadow-sm border border-gray-200",
+                                                className="px-6 py-4 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow interactive group",
                                                 children=[
-                                                    html.Span(className="text-2xl font-bold text-f1-orange"), "🌍 Global Data"
-                                                ]
+                                                    html.Span(className="text-3xl font-extrabold text-f1-orange block"), "76+",
+                                                    html.Small(className="text-gray-600 font-medium"), "Countries Represented",
+                                                ],
+                                            ),
+                                            html.Div(
+                                                className="px-6 py-4 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow interactive group",
+                                                children=[
+                                                    html.Span(className="text-3xl font-extrabold text-green-500 block"), "10+",
+                                                    html.Small(className="text-gray-600 font-medium"), "Interactive Visualizations",
+                                                ],
+                                            ),
+                                        ],
+                                    ),
+                                    # Call to action
+                                    html.Div(
+                                        className="mt-10",
+                                        children=[
+                                            html.A(
+                                                href="#calendar",
+                                                className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-f1-red to-red-700 text-white rounded-lg font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all interactive",
+                                                children=[
+                                                    "Start Exploring",
+                                                    html.Span(className="text-xl"), "↓",
+                                                ],
                                             ),
                                         ],
                                     ),
@@ -266,8 +357,8 @@ app.layout = html.Div([
                     _section(
                         "calendar",
                         "📅",
-                        "Calendar & Circuits",
-                        "How the championship schedule grew in volume, density, and geographic breadth.",
+                        "The Evolution of F1: From 7 Races to a Global Marathon",
+                        "Discover how F1 transformed from a European championship with just 7 races into today's grueling 24-race global spectacle. Learn which tracks have stood the test of time and which vanished into history.",
                         [
                             _viz_card(
                                 "F1 Championship Evolution: Annual Volume & Scheduling Density",
@@ -371,8 +462,8 @@ app.layout = html.Div([
                     _section(
                         "nationality",
                         "👥",
-                        "Nationality & Talent",
-                        "Structural diversification and regional waves of talent influx on the grid.",
+                        "The Globalization of Genius: How F1 Became Truly International",
+                        "From 49% European drivers in the 1950s to today's worldwide talent pool — trace the seismic shifts in where F1 champions come from. Uncover why North America went from 43% dominance to near extinction.",
                         [
                             _viz_card(
                                 "Structural Global Diversification: Driver & Constructor Nationalities Over Time",
@@ -401,8 +492,8 @@ app.layout = html.Div([
                     _section(
                         "competition",
                         "🏆",
-                        "Competition Dynamics",
-                        "Team driver utilization and win dominance across eras.",
+                        "Dynasties & Dominance: Who REALLY Ruled F1 History?",
+                        "Compare legendary rivalries, measure absolute domination, and discover which decades were truly competitive vs. controlled by a single driver or team.",
                         [
                             _viz_card(
                                 "Driver Retention & Team Stability: Average Races per Driver per Decade",
@@ -431,8 +522,8 @@ app.layout = html.Div([
                     _section(
                         "performance",
                         "⚡",
-                        "Performance & Demographics",
-                        "Pit-lane pace evolution and shifting driver age profiles.",
+                        "Speed, Age & Strategy: The Science of F1 Performance",
+                        "Why are modern F1 drivers 8 years younger on average? Why haven't pit stops gotten faster since 2012? Explore the data behind speed and success.",
                         [
                             _viz_card(
                                 "Pit-Lane Excellence: Team Strategy & Pace Evolution (2011+)",
