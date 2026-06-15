@@ -27,13 +27,22 @@ def build_figure() -> go.Figure:
         y="avg_races_per_driver",
         points="all",
         hover_name="name",
-        hover_data=["total_entries", "num_drivers"],
-        labels={"decade": "Decade", "avg_races_per_driver": "Average Races per Driver"},
+        hover_data={
+            "decade": True,
+            "avg_races_per_driver": ":.1f",
+            "total_entries": True,
+            "num_drivers": True,
+        },
+        labels={
+            "decade": "Decade",
+            "avg_races_per_driver": "Average Races per Driver",
+            "total_entries": "Total Entries",
+            "num_drivers": "Number of Drivers",
+        },
     )
 
     apply_theme(
         fig,
-        title="Average Races per Driver per Team per Decade",
         height=560,
         xaxis_title="Decade",
         yaxis_title="Average Races per Driver",
