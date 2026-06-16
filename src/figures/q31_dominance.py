@@ -37,6 +37,7 @@ def build_figure() -> go.Figure:
             y=driver_pivot.index,
             colorscale=SEQUENTIAL_RED,
             colorbar=dict(title="Wins", x=0.42),
+            hovertemplate="<b>%{y}</b><br>Decade: %{x}s<br>Wins: %{z}<extra></extra>",
         ),
         row=1, col=1,
     )
@@ -47,6 +48,7 @@ def build_figure() -> go.Figure:
             y=constructor_pivot.index,
             colorscale=SEQUENTIAL_BLUE,
             colorbar=dict(title="Wins", x=1.02),
+            hovertemplate="<b>%{y}</b><br>Decade: %{x}s<br>Wins: %{z}<extra></extra>",
         ),
         row=1, col=2,
     )
@@ -56,10 +58,9 @@ def build_figure() -> go.Figure:
 
     apply_theme(
         fig,
-        title="Driver vs Constructor Dominance per Decade",
         height=800,
         dragmode=False,
-        margin=dict(l=80, r=100, t=100, b=60),
+        margin=dict(l=80, r=100, t=60, b=60),
     )
     fig.update_xaxes(fixedrange=True)
     fig.update_yaxes(fixedrange=True, autorange="reversed")
