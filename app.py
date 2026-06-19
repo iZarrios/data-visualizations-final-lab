@@ -371,7 +371,7 @@ app.layout = html.Div(
                                                         html.Span(
                                                             className="text-3xl font-extrabold text-f1-red block"
                                                         ),
-                                                        "74",
+                                                        "74 ",
                                                         html.Small(
                                                             className="text-gray-600 font-medium"
                                                         ),
@@ -384,7 +384,7 @@ app.layout = html.Div(
                                                         html.Span(
                                                             className="text-3xl font-extrabold text-f1-blue block"
                                                         ),
-                                                        "1,118",
+                                                        "1,118 ",
                                                         html.Small(
                                                             className="text-gray-600 font-medium"
                                                         ),
@@ -397,7 +397,7 @@ app.layout = html.Div(
                                                         html.Span(
                                                             className="text-3xl font-extrabold text-f1-orange block"
                                                         ),
-                                                        "76+",
+                                                        "76+ ",
                                                         html.Small(
                                                             className="text-gray-600 font-medium"
                                                         ),
@@ -410,7 +410,7 @@ app.layout = html.Div(
                                                         html.Span(
                                                             className="text-3xl font-extrabold text-green-500 block"
                                                         ),
-                                                        "10+",
+                                                        "10+ ",
                                                         html.Small(
                                                             className="text-gray-600 font-medium"
                                                         ),
