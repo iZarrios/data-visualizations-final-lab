@@ -99,6 +99,7 @@ def build_figure() -> go.Figure:
             xanchor="center", x=0.5, font=dict(size=10),
             itemsizing="constant", tracegroupgap=8,
         ),
+        dragmode=False,
         xaxis_title="Season",
         yaxis_title="Median pit-lane time (s)",
         margin=dict(t=90, b=100, l=78, r=30),
@@ -108,5 +109,7 @@ def build_figure() -> go.Figure:
         showgrid=True,
         gridcolor=COLORS["grid_line"],
         gridwidth=1,
+        fixedrange=True,
     )
+    fig.update_yaxes(fixedrange=True)
     return fig
