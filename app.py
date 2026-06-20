@@ -12,11 +12,7 @@ from dash import Dash, Input, Output, callback_context, dcc, html
 
 from src.figures.calendar_volume import build_figure as build_calendar_volume
 from src.figures.circuit_presence import build_figure as build_circuit_presence
-from src.figures.geographic_cog import (
-    build_globe_figure,
-    build_timeline_figure,
-    get_decades,
-)
+from src.figures.geographic_cog import build_globe_figure, build_timeline_figure, get_decades
 from src.figures.q24_team_races import build_figure as build_q24
 from src.figures.q31_dominance import build_figure as build_q31
 from src.figures.q33_pit_stops import build_figure as build_q33
