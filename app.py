@@ -82,12 +82,29 @@ def _graph(figure, *, config: dict | None = None):
     )
 
 
-def _viz_card(title: str, description: str, figure_component, insights: list[str]):
+def _viz_card(
+    title: str,
+    description: str,
+    figure_component,
+    insights: list[str],
+    badge: str | None = None,
+):
     """Create a visualization card with title, description, graph, and insights."""
+    title_block = html.H4(
+        className="text-xl font-bold text-gray-800 mb-3", children=title
+    )
+    if badge:
+        title_block = html.Div(
+            className="flex items-center gap-4 mb-3",
+            children=[
+                html.Span(badge, className="section-badge"),
+                html.H4(className="text-xl font-bold text-gray-800", children=title),
+            ],
+        )
     return html.Div(
         className="bg-white rounded-lg p-6 mb-8 shadow-md card-hover border border-gray-200",
         children=[
-            html.H4(className="text-xl font-bold text-gray-800 mb-3", children=title),
+            title_block,
             html.P(
                 className="text-gray-600 mb-4 leading-relaxed",
                 children=description,
@@ -123,8 +140,13 @@ def _section(
         id=section_id,
         className="py-12 border-t border-gray-300 fade-in-section",
         children=[
-            html.Span(section_badge, className="section-badge"),
-            html.H2(title, className="text-3xl font-bold text-gray-800 mb-3"),
+            html.Div(
+                className="flex items-center gap-4 mb-3",
+                children=[
+                    html.Span(section_badge, className="section-badge"),
+                    html.H2(title, className="text-3xl font-bold text-gray-800"),
+                ],
+            ),
             html.P(blurb, className="text-gray-600 mb-6 max-w-4xl"),
             *children,
         ],
@@ -194,7 +216,7 @@ app.layout = html.Div(
                             children=[
                                 # Logo/Brand area
                                 html.A(
-                                    href="#calendar",
+                                    href="#top",
                                     className="flex items-center gap-3 group",
                                     children=[
                                         html.Div(
@@ -222,11 +244,11 @@ app.layout = html.Div(
                                     children=[
                                         html.A(
                                             href=f"#{section['id']}",
-                                            className=f"nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-f1-red rounded-lg interactive {('active' if i == 0 else '')}",
+                                            className="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-f1-red rounded-lg interactive",
                                             children=section["title"],
                                             key=f"nav-{section['id']}",
                                         )
-                                        for i, section in enumerate(SECTIONS)
+                                        for section in SECTIONS
                                     ],
                                 ),
                             ],
@@ -235,13 +257,14 @@ app.layout = html.Div(
                 ),
             ],
         ),
-        # Main Content (with top padding for fixed navbar)
+        # Main Content
         html.Div(
-            className="pt-28 pb-16",
+            className="pb-16",
             children=[
-                # Hero Section
+                # Hero Section (own top padding so its gradient reaches the navbar)
                 html.Section(
-                    className="relative overflow-hidden mb-16",
+                    id="top",
+                    className="relative overflow-hidden mb-16 scroll-mt-28 pt-28",
                     children=[
                         # Subtle background pattern with racing theme
                         html.Div(
@@ -447,7 +470,7 @@ app.layout = html.Div(
                         _section(
                             "calendar",
                             "📅",
-                            "The Evolution of F1: From 7 Races to a Global Marathon",
+                            "Calendar & Circuits: From 7 Races to a Global Marathon",
                             "Discover how F1 transformed from a European championship with just 7 races into today's 24-race global spectacle. Learn which tracks have stood the test of time and which vanished into history.",
                             [
                                 _viz_card(
@@ -493,7 +516,10 @@ app.layout = html.Div(
                                 ),
                             ],
                         ),
-                        _viz_card(
+                        html.Div(
+                            id="geographic",
+                            className="py-12 border-t border-gray-300 fade-in-section",
+                            children=[_viz_card(
                             "Geographic Evolution: Regional Race Distribution & Center of Gravity",
                             "This dual visualization explores how F1 has transformed from a European-centric championship into a truly global sport. The stacked bar chart shows race distribution across world regions by decade, revealing the emergence of new markets. The interactive globe displays actual circuit locations (dots sized by races hosted) and traces the spherical center of gravity - a weighted average position that literally tracks how F1's geographic focus has shifted over time as the dashed line moves across the map.",
                             html.Div(
@@ -549,11 +575,13 @@ app.layout = html.Div(
                                 "Middle Eastern races (Bahrain, Abu Dhabi, Saudi Arabia) represent the newest wave of growth since 2000s",
                                 "Interactive slider lets you see how the geographic center shifted with each era of expansion",
                             ],
+                            badge="🌍",
+                        )],
                         ),
                         _section(
                             "nationality",
                             "👥",
-                            "The Globalization of Genius: How F1 Became Truly International",
+                            "Nationality & Talent: The Globalization of Genius",
                             "From 49% European drivers in the 1950s to today's worldwide talent pool. Trace the seismic shifts in where F1 champions come from and uncover why North America went from 43% dominance to near extinction.",
                             [
                                 _viz_card(
@@ -614,7 +642,7 @@ app.layout = html.Div(
                         _section(
                             "competition",
                             "🏆",
-                            "Dynasties & Dominance: Who REALLY Ruled F1 History?",
+                            "Competition Dynamics: Dynasties & Dominance",
                             "Compare legendary rivalries, measure absolute domination, and discover which decades were truly competitive vs. controlled by a single driver or team.",
                             [
                                 _viz_card(
@@ -670,7 +698,7 @@ app.layout = html.Div(
                         _section(
                             "performance",
                             "⚡",
-                            "Speed, Age & Strategy: The Science of F1 Performance",
+                            "Performance & Demographics: Speed, Age & Strategy",
                             "Why are modern F1 drivers 8 years younger on average? Why haven't pit stops gotten faster since 2012? Explore the data behind speed and success.",
                             [
                                 _viz_card(
@@ -880,7 +908,12 @@ app.layout = html.Div(
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener("click", function(e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute("href"));
+                const href = this.getAttribute("href");
+                if (href === "#top") {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    return;
+                }
+                const target = document.querySelector(href);
                 if (target) {
                     target.scrollIntoView({ behavior: "smooth", block: "start" });
                 }
