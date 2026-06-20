@@ -42,14 +42,32 @@ Press `Ctrl+C` in the terminal to stop the server.
 ## Project structure
 
 ```
-data/              Ergast CSV files
-src/
+data/              F1 dataset: Ergast CSV files
+src/               Main code structure used within the project
   theme.py         Shared cream Plotly theme
   data_loader.py   Cached data loaders
+  utils.py         Functions commonly used
   figures/         One module per visualization
-app.py             Dash entry point
-requirements.txt
-render.yaml        Render deployment config
+    calendar_volume.py    All the viz used for the website
+    circuit_presence.py
+    geographic_cog.py
+    q24_team_races.py
+    q31_dominance.py
+    q33_pit_stops.py
+    q41_driver_age.py
+    venue_share.py
+    viz8_nationalities.py
+    viz9_regions.py
+static/
+  css/
+    styles.css    Custom visual styling
+app.py            Dash entry point
+requirements.txt  Virtual env
+render.yaml       Render deployment config
+.gitignore        What git ignores
+.python-version   Python verseion used for the project
+uv.lock           UV env
+pyproject.toml    UV env
 ```
 
 ## Dashboard contents
