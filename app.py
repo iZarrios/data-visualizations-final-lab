@@ -870,7 +870,7 @@ app.layout = html.Div(
                                                     className="px-3 py-1 bg-gray-700 rounded-full text-xs",
                                                 ),
                                                 html.Span(
-                                                    "Tailwind",
+                                                    "TailwindCSS",
                                                     className="px-3 py-1 bg-gray-700 rounded-full text-xs",
                                                 ),
                                             ],
