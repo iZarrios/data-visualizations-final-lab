@@ -12,7 +12,7 @@ Interactive Dash dashboard of Formula 1 analytics built with Plotly, using the [
 ### Option A — uv (recommended)
 
 ```bash
-cd data-viz-final-lab
+cd data-visualizations-final-lab
 uv sync
 uv run python app.py
 ```
