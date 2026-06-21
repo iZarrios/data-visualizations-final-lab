@@ -4,15 +4,17 @@ Premium Racing Theme with Tailwind CSS
 Team 3 | Course: Data Visualization Lab
 """
 
-from __future__ import annotations
-
 import os
 
 from dash import Dash, Input, Output, callback_context, dcc, html
 
 from src.figures.calendar_volume import build_figure as build_calendar_volume
 from src.figures.circuit_presence import build_figure as build_circuit_presence
-from src.figures.geographic_cog import build_globe_figure, build_timeline_figure, get_decades
+from src.figures.geographic_cog import (
+    build_globe_figure,
+    build_timeline_figure,
+    get_decades,
+)
 from src.figures.q24_team_races import build_figure as build_q24
 from src.figures.q31_dominance import build_figure as build_q31
 from src.figures.q33_pit_stops import build_figure as build_q33
@@ -85,7 +87,6 @@ def _viz_card(
     insights: list[str],
     badge: str | None = None,
 ):
-    """Create a visualization card with title, description, graph, and insights."""
     title_block = html.H4(
         className="text-xl font-bold text-gray-800 mb-3", children=title
     )
@@ -515,64 +516,67 @@ app.layout = html.Div(
                         html.Div(
                             id="geographic",
                             className="py-12 border-t border-gray-300 fade-in-section",
-                            children=[_viz_card(
-                            "Geographic Evolution: Regional Race Distribution & Center of Gravity",
-                            "This dual visualization explores how F1 has transformed from a European-centric championship into a truly global sport. The stacked bar chart shows race distribution across world regions by decade, revealing the emergence of new markets. The interactive globe displays actual circuit locations (dots sized by races hosted) and traces the spherical center of gravity - a weighted average position that literally tracks how F1's geographic focus has shifted over time as the dashed line moves across the map.",
-                            html.Div(
-                                [
+                            children=[
+                                _viz_card(
+                                    "Geographic Evolution: Regional Race Distribution & Center of Gravity",
+                                    "This dual visualization explores how F1 has transformed from a European-centric championship into a truly global sport. The stacked bar chart shows race distribution across world regions by decade, revealing the emergence of new markets. The interactive globe displays actual circuit locations (dots sized by races hosted) and traces the spherical center of gravity - a weighted average position that literally tracks how F1's geographic focus has shifted over time as the dashed line moves across the map.",
                                     html.Div(
-                                        className="flex gap-4 flex-wrap mb-6",
-                                        children=[
+                                        [
                                             html.Div(
-                                                className="flex-1 min-w-[45%] bg-gray-50 rounded-lg p-3 shadow-sm border border-gray-200",
+                                                className="flex gap-4 flex-wrap mb-6",
                                                 children=[
-                                                    dcc.Graph(
-                                                        id="cog-timeline",
-                                                        config=STATIC_GRAPH_CONFIG,
-                                                    )
+                                                    html.Div(
+                                                        className="flex-1 min-w-[45%] bg-gray-50 rounded-lg p-3 shadow-sm border border-gray-200",
+                                                        children=[
+                                                            dcc.Graph(
+                                                                id="cog-timeline",
+                                                                config=STATIC_GRAPH_CONFIG,
+                                                            )
+                                                        ],
+                                                    ),
+                                                    html.Div(
+                                                        className="flex-1 min-w-[45%] bg-gray-50 rounded-lg p-3 shadow-sm border border-gray-200",
+                                                        children=[
+                                                            dcc.Graph(
+                                                                id="cog-globe",
+                                                                config=GRAPH_CONFIG,
+                                                            )
+                                                        ],
+                                                    ),
                                                 ],
                                             ),
                                             html.Div(
-                                                className="flex-1 min-w-[45%] bg-gray-50 rounded-lg p-3 shadow-sm border border-gray-200",
+                                                className="px-4 py-3 bg-white rounded-lg shadow-sm border border-gray-200",
                                                 children=[
-                                                    dcc.Graph(
-                                                        id="cog-globe",
-                                                        config=GRAPH_CONFIG,
-                                                    )
+                                                    html.Label(
+                                                        "Show data up to decade:",
+                                                        className="font-semibold text-gray-700 block mb-4",
+                                                    ),
+                                                    dcc.Slider(
+                                                        id="decade-slider",
+                                                        min=min(decades),
+                                                        max=max(decades),
+                                                        value=max(decades),
+                                                        marks={
+                                                            str(d): f"{d}s"
+                                                            for d in decades
+                                                        },
+                                                        step=None,
+                                                        className="custom-slider",
+                                                    ),
                                                 ],
                                             ),
-                                        ],
+                                        ]
                                     ),
-                                    html.Div(
-                                        className="px-4 py-3 bg-white rounded-lg shadow-sm border border-gray-200",
-                                        children=[
-                                            html.Label(
-                                                "Show data up to decade:",
-                                                className="font-semibold text-gray-700 block mb-4",
-                                            ),
-                                            dcc.Slider(
-                                                id="decade-slider",
-                                                min=min(decades),
-                                                max=max(decades),
-                                                value=max(decades),
-                                                marks={
-                                                    str(d): f"{d}s" for d in decades
-                                                },
-                                                step=None,
-                                                className="custom-slider",
-                                            ),
-                                        ],
-                                    ),
-                                ]
-                            ),
-                            [
-                                "Europe's dominance has gradually declined as Middle East, Asia-Pacific, and Americas regions expanded",
-                                "The center of gravity path visually demonstrates F1's expansion eastward and southward over decades",
-                                "Middle Eastern races (Bahrain, Abu Dhabi, Saudi Arabia) represent the newest wave of growth since 2000s",
-                                "Interactive slider lets you see how the geographic center shifted with each era of expansion",
+                                    [
+                                        "Europe's dominance has gradually declined as Middle East, Asia-Pacific, and Americas regions expanded",
+                                        "The center of gravity path visually demonstrates F1's expansion eastward and southward over decades",
+                                        "Middle Eastern races (Bahrain, Abu Dhabi, Saudi Arabia) represent the newest wave of growth since 2000s",
+                                        "Interactive slider lets you see how the geographic center shifted with each era of expansion",
+                                    ],
+                                    badge="🌍",
+                                )
                             ],
-                            badge="🌍",
-                        )],
                         ),
                         _section(
                             "nationality",

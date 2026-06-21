@@ -1,7 +1,5 @@
 """Classic vs modern venue share by decade."""
 
-from __future__ import annotations
-
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
@@ -22,20 +20,37 @@ def build_figure() -> go.Figure:
     )
     df_merged["decade"] = (df_merged["year"] // 10 * 10).astype(str) + "s"
 
-    decade_share = df_merged.groupby(["decade", "venue_type"]).size().reset_index(name="race_count")
+    decade_share = (
+        df_merged.groupby(["decade", "venue_type"])
+        .size()
+        .reset_index(name="race_count")
+    )
 
     fig = px.bar(
         decade_share,
         x="decade",
         y="race_count",
         color="venue_type",
-        labels={"decade": "Decade", "race_count": "Number of Races", "venue_type": "Circuit Type"},
+        labels={
+            "decade": "Decade",
+            "race_count": "Number of Races",
+            "venue_type": "Circuit Type",
+        },
         color_discrete_map={
             "Classic Tracks (1950-1960)": COLORS["accent_purple"],
             "Modern & New Venues": COLORS["primary_blue"],
         },
         category_orders={
-            "decade": ["1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s", "2020s"],
+            "decade": [
+                "1950s",
+                "1960s",
+                "1970s",
+                "1980s",
+                "1990s",
+                "2000s",
+                "2010s",
+                "2020s",
+            ],
         },
     )
 
@@ -48,7 +63,8 @@ def build_figure() -> go.Figure:
         yaxis=dict(title="<b>Number of Races</b>", zeroline=False),
         legend=dict(
             title=dict(text="<b>Circuit Type</b>"),
-            x=0.02, y=0.98,
+            x=0.02,
+            y=0.98,
         ),
         dragmode=False,
         margin=dict(l=100, r=100, t=120, b=80),

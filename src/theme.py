@@ -1,7 +1,5 @@
 """Shared F1 cream theme for all Plotly figures."""
 
-from __future__ import annotations
-
 import plotly.graph_objects as go
 import plotly.io as pio
 
@@ -105,7 +103,7 @@ def apply_theme(
     width: int | None = None,
     **layout_kwargs,
 ) -> go.Figure:
-    """Apply the shared cream theme and return the figure."""
+    """Apply the shared F1 cream Plotly template."""
     layout = dict(
         template="f1_cream",
         paper_bgcolor=COLORS["neutral_bg"],

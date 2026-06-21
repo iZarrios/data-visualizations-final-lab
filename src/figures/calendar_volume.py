@@ -1,7 +1,5 @@
 """F1 championship volume and scheduling density by season."""
 
-from __future__ import annotations
-
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -56,19 +54,26 @@ def build_figure() -> go.Figure:
         height=600,
         hovermode="x unified",
         yaxis=dict(
-            title=dict(text="<b>Total Scheduled Races</b>", font=dict(color=COLORS["primary_blue"])),
+            title=dict(
+                text="<b>Total Scheduled Races</b>",
+                font=dict(color=COLORS["primary_blue"]),
+            ),
             side="left",
             gridcolor=COLORS["grid_line"],
             zeroline=False,
         ),
         yaxis2=dict(
-            title=dict(text="<b>Average Days Gap</b>", font=dict(color=COLORS["accent_orange"])),
+            title=dict(
+                text="<b>Average Days Gap</b>", font=dict(color=COLORS["accent_orange"])
+            ),
             side="right",
             overlaying="y",
             gridcolor="rgba(0,0,0,0)",
             zeroline=False,
         ),
-        xaxis=dict(title="<b>Championship Year</b>", dtick=10, gridcolor=COLORS["grid_line"]),
+        xaxis=dict(
+            title="<b>Championship Year</b>", dtick=10, gridcolor=COLORS["grid_line"]
+        ),
         legend=dict(x=0.02, y=0.98),
         margin=dict(l=80, r=80, t=100, b=80),
     )

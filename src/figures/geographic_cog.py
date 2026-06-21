@@ -1,7 +1,5 @@
 """Geographic evolution — regional race distribution and spherical center of gravity."""
 
-from __future__ import annotations
-
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -11,18 +9,41 @@ from src.data_loader import load_circuits, load_races
 from src.theme import COLORS, REGION_COLORS, apply_theme
 
 COUNTRY_TO_REGION = {
-    "UK": "Europe", "Italy": "Europe", "France": "Europe", "Germany": "Europe",
-    "Belgium": "Europe", "Netherlands": "Europe", "Spain": "Europe", "Switzerland": "Europe",
-    "Austria": "Europe", "Sweden": "Europe", "Monaco": "Europe", "Portugal": "Europe",
-    "Hungary": "Europe", "Turkey": "Europe", "Russia": "Europe",
-    "USA": "Americas", "United States": "Americas", "Brazil": "Americas",
-    "Argentina": "Americas", "Mexico": "Americas", "Canada": "Americas",
-    "Japan": "Asia-Pacific", "China": "Asia-Pacific", "Australia": "Asia-Pacific",
-    "Malaysia": "Asia-Pacific", "Singapore": "Asia-Pacific", "Korea": "Asia-Pacific",
+    "UK": "Europe",
+    "Italy": "Europe",
+    "France": "Europe",
+    "Germany": "Europe",
+    "Belgium": "Europe",
+    "Netherlands": "Europe",
+    "Spain": "Europe",
+    "Switzerland": "Europe",
+    "Austria": "Europe",
+    "Sweden": "Europe",
+    "Monaco": "Europe",
+    "Portugal": "Europe",
+    "Hungary": "Europe",
+    "Turkey": "Europe",
+    "Russia": "Europe",
+    "USA": "Americas",
+    "United States": "Americas",
+    "Brazil": "Americas",
+    "Argentina": "Americas",
+    "Mexico": "Americas",
+    "Canada": "Americas",
+    "Japan": "Asia-Pacific",
+    "China": "Asia-Pacific",
+    "Australia": "Asia-Pacific",
+    "Malaysia": "Asia-Pacific",
+    "Singapore": "Asia-Pacific",
+    "Korea": "Asia-Pacific",
     "India": "Asia-Pacific",
-    "UAE": "Middle East", "Bahrain": "Middle East", "Qatar": "Middle East",
-    "Saudi Arabia": "Middle East", "Azerbaijan": "Middle East",
-    "South Africa": "Africa", "Morocco": "Africa",
+    "UAE": "Middle East",
+    "Bahrain": "Middle East",
+    "Qatar": "Middle East",
+    "Saudi Arabia": "Middle East",
+    "Azerbaijan": "Middle East",
+    "South Africa": "Africa",
+    "Morocco": "Africa",
 }
 
 
@@ -45,6 +66,7 @@ def load_circuit_decade_data() -> pd.DataFrame:
 
 
 def calculate_spherical_cog(dataframe: pd.DataFrame) -> pd.DataFrame:
+    """Race-weighted center of gravity per decade using 3D spherical averaging."""
     cog_list = []
     for dec in sorted(dataframe["decade"].unique()):
         df_dec = dataframe[dataframe["decade"] == dec]
@@ -61,11 +83,13 @@ def calculate_spherical_cog(dataframe: pd.DataFrame) -> pd.DataFrame:
         z_avg = np.sum(z) / np.sum(w)
 
         hyp = np.sqrt(x_avg**2 + y_avg**2)
-        cog_list.append({
-            "decade": dec,
-            "cog_lat": np.degrees(np.arctan2(z_avg, hyp)),
-            "cog_lon": np.degrees(np.arctan2(y_avg, x_avg)),
-        })
+        cog_list.append(
+            {
+                "decade": dec,
+                "cog_lat": np.degrees(np.arctan2(z_avg, hyp)),
+                "cog_lon": np.degrees(np.arctan2(y_avg, x_avg)),
+            }
+        )
     return pd.DataFrame(cog_list)
 
 
@@ -77,15 +101,23 @@ def get_decades() -> list[int]:
 def build_timeline_figure(selected_decade: int) -> go.Figure:
     df = load_circuit_decade_data()
     filtered = df[df["decade"] <= selected_decade]
-    timeline_data = filtered.groupby(["decade", "region"])["races_hosted"].sum().reset_index()
+    timeline_data = (
+        filtered.groupby(["decade", "region"])["races_hosted"].sum().reset_index()
+    )
 
-    color_map = {r: REGION_COLORS.get(r, "#7f7f7f") for r in timeline_data["region"].unique()}
+    color_map = {
+        r: REGION_COLORS.get(r, "#7f7f7f") for r in timeline_data["region"].unique()
+    }
     fig = px.bar(
         timeline_data,
         x="decade",
         y="races_hosted",
         color="region",
-        labels={"races_hosted": "Total Races Held", "decade": "Decade", "region": "Region"},
+        labels={
+            "races_hosted": "Total Races Held",
+            "decade": "Decade",
+            "region": "Region",
+        },
         color_discrete_map=color_map,
         barmode="stack",
     )

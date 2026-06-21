@@ -1,7 +1,5 @@
 """Q2.1 — Driver vs constructor nationality diversification by decade."""
 
-from __future__ import annotations
-
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -16,19 +14,28 @@ def _preprocess() -> pd.DataFrame:
     constructors = load_constructors()[["constructorId", "nationality"]].copy()
 
     for frame in (drivers, constructors):
-        frame["nationality"] = frame["nationality"].astype("string").str.strip().str.title()
+        frame["nationality"] = (
+            frame["nationality"].astype("string").str.strip().str.title()
+        )
 
     entries = (
         results.merge(races, on="raceId")
         .merge(drivers.rename(columns={"nationality": "driver_nat"}), on="driverId")
-        .merge(constructors.rename(columns={"nationality": "constructor_nat"}), on="constructorId")
+        .merge(
+            constructors.rename(columns={"nationality": "constructor_nat"}),
+            on="constructorId",
+        )
     )
     entries["decade"] = (entries["year"] // 10) * 10
 
-    grouped = entries.groupby("decade").agg(
-        driver_nationalities=("driver_nat", "nunique"),
-        constructor_nationalities=("constructor_nat", "nunique"),
-    ).reset_index()
+    grouped = (
+        entries.groupby("decade")
+        .agg(
+            driver_nationalities=("driver_nat", "nunique"),
+            constructor_nationalities=("constructor_nat", "nunique"),
+        )
+        .reset_index()
+    )
     grouped["decade_label"] = grouped["decade"].astype(str) + "s"
     return grouped.sort_values("decade").reset_index(drop=True)
 

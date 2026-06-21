@@ -1,4 +1,4 @@
-from __future__ import annotations
+"""Cached loaders for Ergast F1 CSV exports."""
 
 from functools import lru_cache
 

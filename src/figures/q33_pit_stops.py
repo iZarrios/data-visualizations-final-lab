@@ -1,7 +1,5 @@
 """Q3.3 — Pit-stop pace evolution and team strategy edges (2011+)."""
 
-from __future__ import annotations
-
 import numpy as np
 import plotly.graph_objects as go
 
@@ -21,15 +19,20 @@ def _preprocess():
             on=["raceId", "driverId"],
             how="left",
         )
-        .merge(load_constructors()[["constructorId", "name"]], on="constructorId", how="left")
+        .merge(
+            load_constructors()[["constructorId", "name"]],
+            on="constructorId",
+            how="left",
+        )
         .rename(columns={"name": "constructor_name"})
     )
     pit_team["pit_lane_seconds"] = pit_team["milliseconds"] / 1000
-    pit_normal = pit_team.query("10 <= pit_lane_seconds <= 60").copy()
+    pit_normal = pit_team.query(
+        "10 <= pit_lane_seconds <= 60"
+    ).copy()  # drop bad/outlier stops
 
-    fleet_by_year = (
-        pit_normal.groupby("year", as_index=False)
-        .agg(median_pit=("pit_lane_seconds", "median"), stops=("pit_lane_seconds", "count"))
+    fleet_by_year = pit_normal.groupby("year", as_index=False).agg(
+        median_pit=("pit_lane_seconds", "median"), stops=("pit_lane_seconds", "count")
     )
 
     top_pit_teams = (
@@ -42,7 +45,10 @@ def _preprocess():
     team_year_pit = (
         pit_normal[pit_normal["constructor_name"].isin(top_pit_teams)]
         .groupby(["year", "constructor_name"], as_index=False)
-        .agg(median_pit=("pit_lane_seconds", "median"), stops=("pit_lane_seconds", "count"))
+        .agg(
+            median_pit=("pit_lane_seconds", "median"),
+            stops=("pit_lane_seconds", "count"),
+        )
         .query("stops >= 15")
     )
     year_median_lookup = fleet_by_year.set_index("year")["median_pit"]
@@ -73,16 +79,22 @@ def build_figure() -> go.Figure:
     )
 
     for i, team in enumerate(top_pit_teams):
-        team_line = team_year_pit[team_year_pit["constructor_name"] == team].sort_values("year")
+        team_line = team_year_pit[
+            team_year_pit["constructor_name"] == team
+        ].sort_values("year")
         fig.add_trace(
             go.Scatter(
                 x=team_line["year"],
                 y=team_line["median_pit"],
                 mode="lines+markers",
                 name=team,
-                line=dict(color=CATEGORICAL_PALETTE[i % len(CATEGORICAL_PALETTE)], width=1.5),
+                line=dict(
+                    color=CATEGORICAL_PALETTE[i % len(CATEGORICAL_PALETTE)], width=1.5
+                ),
                 marker=dict(size=5),
-                customdata=np.stack([team_line["edge_vs_field"], team_line["stops"]], axis=-1),
+                customdata=np.stack(
+                    [team_line["edge_vs_field"], team_line["stops"]], axis=-1
+                ),
                 hovertemplate=(
                     f"{team}<br>Season %{{x}}<br>Median: %{{y:.2f}} s<br>"
                     "Vs field: %{customdata[0]:+.2f} s<br>Stops: %{customdata[1]}<extra></extra>"
@@ -95,9 +107,14 @@ def build_figure() -> go.Figure:
         title="Fleet and Team Median Pit-Lane Times by Season",
         height=560,
         legend=dict(
-            orientation="h", yanchor="bottom", y=-0.28,
-            xanchor="center", x=0.5, font=dict(size=10),
-            itemsizing="constant", tracegroupgap=8,
+            orientation="h",
+            yanchor="bottom",
+            y=-0.28,
+            xanchor="center",
+            x=0.5,
+            font=dict(size=10),
+            itemsizing="constant",
+            tracegroupgap=8,
         ),
         dragmode=False,
         xaxis_title="Season",

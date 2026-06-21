@@ -1,7 +1,5 @@
 """Q2.2 — Geopolitical waves of talent influx by region."""
 
-from __future__ import annotations
-
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -9,22 +7,49 @@ from src.data_loader import load_drivers, load_races, load_results
 from src.theme import COLORS, apply_theme
 
 NATIONALITY_TO_REGION = {
-    "British": "Western Europe", "Italian": "Western Europe", "French": "Western Europe",
-    "German": "Western Europe", "Belgian": "Western Europe", "Dutch": "Western Europe",
-    "Spanish": "Western Europe", "Swiss": "Western Europe", "Austrian": "Western Europe",
-    "Swedish": "Western Europe", "Finnish": "Western Europe", "Danish": "Western Europe",
-    "Irish": "Western Europe", "Portuguese": "Western Europe", "Monegasque": "Western Europe",
+    "British": "Western Europe",
+    "Italian": "Western Europe",
+    "French": "Western Europe",
+    "German": "Western Europe",
+    "Belgian": "Western Europe",
+    "Dutch": "Western Europe",
+    "Spanish": "Western Europe",
+    "Swiss": "Western Europe",
+    "Austrian": "Western Europe",
+    "Swedish": "Western Europe",
+    "Finnish": "Western Europe",
+    "Danish": "Western Europe",
+    "Irish": "Western Europe",
+    "Portuguese": "Western Europe",
+    "Monegasque": "Western Europe",
     "Liechtensteiner": "Western Europe",
-    "American": "North America", "American-Italian": "North America", "Canadian": "North America",
-    "Brazilian": "Latin America", "Argentine": "Latin America", "Argentinian": "Latin America",
-    "Argentine-Italian": "Latin America", "Mexican": "Latin America", "Venezuelan": "Latin America",
-    "Colombian": "Latin America", "Chilean": "Latin America", "Uruguayan": "Latin America",
-    "Australian": "Asia-Pacific", "New Zealander": "Asia-Pacific", "Japanese": "Asia-Pacific",
-    "Thai": "Asia-Pacific", "Malaysian": "Asia-Pacific", "Indonesian": "Asia-Pacific",
-    "Indian": "Asia-Pacific", "Chinese": "Asia-Pacific",
-    "Russian": "Eastern Europe", "Polish": "Eastern Europe", "Czech": "Eastern Europe",
-    "Hungarian": "Eastern Europe", "East German": "Eastern Europe",
-    "South African": "Africa & Middle East", "Rhodesian": "Africa & Middle East",
+    "American": "North America",
+    "American-Italian": "North America",
+    "Canadian": "North America",
+    "Brazilian": "Latin America",
+    "Argentine": "Latin America",
+    "Argentinian": "Latin America",
+    "Argentine-Italian": "Latin America",
+    "Mexican": "Latin America",
+    "Venezuelan": "Latin America",
+    "Colombian": "Latin America",
+    "Chilean": "Latin America",
+    "Uruguayan": "Latin America",
+    "Australian": "Asia-Pacific",
+    "New Zealander": "Asia-Pacific",
+    "Japanese": "Asia-Pacific",
+    "Thai": "Asia-Pacific",
+    "Malaysian": "Asia-Pacific",
+    "Indonesian": "Asia-Pacific",
+    "Indian": "Asia-Pacific",
+    "Chinese": "Asia-Pacific",
+    "Russian": "Eastern Europe",
+    "Polish": "Eastern Europe",
+    "Czech": "Eastern Europe",
+    "Hungarian": "Eastern Europe",
+    "East German": "Eastern Europe",
+    "South African": "Africa & Middle East",
+    "Rhodesian": "Africa & Middle East",
 }
 
 REGION_ORDER = [
@@ -48,11 +73,21 @@ def _preprocess() -> pd.DataFrame:
     races = load_races()[["raceId", "year"]]
     results = load_results()[["raceId", "driverId"]]
     drivers = load_drivers()[["driverId", "nationality"]].copy()
-    drivers["nationality"] = drivers["nationality"].astype("string").str.strip().str.title()
-    drivers["region"] = drivers["nationality"].map(NATIONALITY_TO_REGION).fillna("Other")
+    drivers["nationality"] = (
+        drivers["nationality"].astype("string").str.strip().str.title()
+    )
+    drivers["region"] = (
+        drivers["nationality"].map(NATIONALITY_TO_REGION).fillna("Other")
+    )
 
-    entries = results.merge(races, on="raceId").merge(drivers[["driverId", "region"]], on="driverId")
-    counts = entries.groupby(["year", "region"])["driverId"].nunique().reset_index(name="drivers")
+    entries = results.merge(races, on="raceId").merge(
+        drivers[["driverId", "region"]], on="driverId"
+    )
+    counts = (
+        entries.groupby(["year", "region"])["driverId"]
+        .nunique()
+        .reset_index(name="drivers")
+    )
     regions = [name for name, _ in REGION_ORDER]
     return (
         counts.pivot(index="year", columns="region", values="drivers")
@@ -85,13 +120,20 @@ def build_figure() -> go.Figure:
     y_top = data.sum(axis=1).max()
     for label, start, end in ERAS:
         fig.add_vrect(
-            x0=start, x1=end, line_width=0,
-            fillcolor=COLORS["text_dark"], opacity=0.04, layer="below",
+            x0=start,
+            x1=end,
+            line_width=0,
+            fillcolor=COLORS["text_dark"],
+            opacity=0.04,
+            layer="below",
         )
         fig.add_annotation(
-            x=(start + end) / 2, y=y_top * 1.04,
-            text=f"<i>{label}</i>", showarrow=False,
-            font=dict(size=10, color="#666666"), yanchor="bottom",
+            x=(start + end) / 2,
+            y=y_top * 1.04,
+            text=f"<i>{label}</i>",
+            showarrow=False,
+            font=dict(size=10, color="#666666"),
+            yanchor="bottom",
         )
 
     apply_theme(
@@ -101,7 +143,14 @@ def build_figure() -> go.Figure:
         hovermode="x unified",
         xaxis=dict(title="Season", range=[min(years), max(years)]),
         yaxis=dict(title="Number of Drivers on Grid", rangemode="tozero"),
-        legend=dict(title="Region", traceorder="reversed", yanchor="top", y=1.0, xanchor="left", x=1.01),
+        legend=dict(
+            title="Region",
+            traceorder="reversed",
+            yanchor="top",
+            y=1.0,
+            xanchor="left",
+            x=1.01,
+        ),
         margin=dict(t=90, r=120, b=50, l=70),
     )
     return fig

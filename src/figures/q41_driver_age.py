@@ -1,7 +1,5 @@
 """Q4.1 — Driver age at race by decade."""
 
-from __future__ import annotations
-
 import plotly.graph_objects as go
 
 from src.data_loader import load_drivers, race_results
@@ -13,7 +11,9 @@ MAX_HOVER_POINTS_PER_DECADE = 400
 
 def build_figure() -> go.Figure:
     age_frame = race_results().merge(
-        load_drivers()[["driverId", "dob"]], on="driverId", how="left",
+        load_drivers()[["driverId", "dob"]],
+        on="driverId",
+        how="left",
     )
     age_frame["age_years"] = (age_frame["date"] - age_frame["dob"]).dt.days / 365.25
     age_frame = age_frame.dropna(subset=["age_years"]).query("15 <= age_years <= 55")
@@ -27,9 +27,8 @@ def build_figure() -> go.Figure:
         .tolist()
     )
 
-    age_stats = (
-        age_frame.groupby("decade_label", as_index=False)["age_years"]
-        .agg(min_age="min", median_age="median", max_age="max")
+    age_stats = age_frame.groupby("decade_label", as_index=False)["age_years"].agg(
+        min_age="min", median_age="median", max_age="max"
     )
 
     color = COLORS["primary_blue"]
