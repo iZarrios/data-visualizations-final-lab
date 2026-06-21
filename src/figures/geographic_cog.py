@@ -57,11 +57,11 @@ def load_circuit_decade_data() -> pd.DataFrame:
     grouped = (
         merged.groupby(
             ["circuitId", "circuit_name", "decade", "latitude", "longitude", "region"],
-            as_index=False,
         )
         .size()
-        .rename(columns={"size": "races_hosted"})
+        .reset_index(name="races_hosted")
     )
+
     return grouped
 
 

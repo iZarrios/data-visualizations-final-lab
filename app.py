@@ -6,7 +6,7 @@ Team 3 | Course: Data Visualization Lab
 
 import os
 
-from dash import Dash, Input, Output, callback_context, dcc, html
+from dash import Dash, Input, Output, dcc, html
 
 from src.figures.calendar_volume import build_figure as build_calendar_volume
 from src.figures.circuit_presence import build_figure as build_circuit_presence
@@ -22,7 +22,6 @@ from src.figures.q41_driver_age import build_figure as build_q41
 from src.figures.venue_share import build_figure as build_venue_share
 from src.figures.viz8_nationalities import build_figure as build_viz8
 from src.figures.viz9_regions import build_figure as build_viz9
-from src.theme import COLORS
 
 GRAPH_CONFIG = {"displayModeBar": True, "scrollZoom": True}
 
