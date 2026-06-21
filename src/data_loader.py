@@ -1,4 +1,4 @@
-"""Cached loaders for Ergast F1 CSV exports."""
+"""Cached loaders for dataset."""
 
 from functools import lru_cache
 
