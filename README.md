@@ -1,84 +1,67 @@
 # F1 Data Visualization — Final Lab
 
-Interactive Dash dashboard of Formula 1 analytics built with Plotly, using the [Ergast F1 dataset](https://ergast.com/mrd/) (`data/`).
+Interactive Dash dashboard exploring 74 years of Formula 1 history (1950–2024), built with Plotly and the [Formula 1 World Championship dataset on Kaggle](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020) (`data/`).
+
+**Course:** INF8808E (E2026) — Data Visualization Lab · **Team 3**
 
 ## Requirements
 
 - Python **3.13+**
-- Dependencies: `pandas`, `plotly`, `dash`, `gunicorn` (see `requirements.txt`)
+- [uv](https://docs.astral.sh/uv/) for dependency management (`pyproject.toml` / `uv.lock`)
 
 ## Run locally
 
-### Option A — uv (recommended)
-
 ```bash
-cd data-visualizations-final-lab
+cd data-viz-final-lab
 uv sync
 uv run python app.py
 ```
 
-### Option B — pip
+Open **http://localhost:8050** in your browser. Press `Ctrl+C` to stop the server.
+
+## Production
 
 ```bash
-cd data-viz-final-lab
-python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python app.py
+uv run gunicorn app:server --bind 0.0.0.0:$PORT
 ```
 
-Then open **http://localhost:8050** in your browser.
+Set `PORT` to the port your host expects (e.g. `8050`). The WSGI entry point is `server` in `app.py`.
 
-Press `Ctrl+C` in the terminal to stop the server.
+## Data
 
-## Deploy (Render)
-
-1. Push this repo to GitHub.
-2. Create a **Web Service** on [Render](https://render.com) linked to the repo.
-3. Render uses `render.yaml` automatically. Manual settings:
-   - **Build command:** `pip install -r requirements.txt`
-   - **Start command:** `gunicorn app:server --bind 0.0.0.0:$PORT`
+CSV files in `data/` come from the [Formula 1 World Championship (1950–2020) Kaggle dataset](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020) by Rohan Rao. The files are derived from the Ergast API and include races, results, drivers, constructors, circuits, and pit stops.
 
 ## Project structure
 
 ```
-data/              F1 dataset: Ergast CSV files
-src/               Main code structure used within the project
-  theme.py         Shared cream Plotly theme
-  data_loader.py   Cached data loaders
-  utils.py         Functions commonly used
-  figures/         One module per visualization
-    calendar_volume.py    All the viz used for the website
+data/                 F1 championship CSV files (Kaggle dataset)
+src/
+  theme.py            Shared cream Plotly theme and color palette
+  data_loader.py      Cached CSV loaders
+  utils.py            Shared helpers (paths, decade bucketing)
+  figures/            One module per visualization
+    calendar_volume.py
     circuit_presence.py
     geographic_cog.py
+    venue_share.py
+    viz8_nationalities.py
+    viz9_regions.py
     q24_team_races.py
     q31_dominance.py
     q33_pit_stops.py
     q41_driver_age.py
-    venue_share.py
-    viz8_nationalities.py
-    viz9_regions.py
-static/
-  css/
-    styles.css    Custom visual styling
-app.py            Dash entry point
-requirements.txt  Virtual env
-render.yaml       Render deployment config
-.gitignore        What git ignores
-.python-version   Python verseion used for the project
-uv.lock           UV env
-pyproject.toml    UV env
+static/css/styles.css Custom dashboard styling
+app.py                Dash entry point
+pyproject.toml        Dependencies and project metadata
+uv.lock               Locked dependency versions
 ```
 
-## Dashboard contents
+## Dashboard sections
 
-- Calendar volume & scheduling density
-- Classic circuit presence matrix
-- Classic vs modern venue share
-- Geographic evolution (decade slider)
-- Nationality diversification (Q2.1)
-- Regional talent influx (Q2.2)
-- Avg races per driver per team (Q2.4)
-- Win dominance heatmaps (Q3.1)
-- Pit-stop pace evolution (Q3.3)
-- Driver age by decade (Q4.1)
+| Section | Visualizations |
+|---------|----------------|
+| **Calendar & Circuits** | Championship volume & scheduling density · Classic circuit presence matrix · Classic vs modern venue share |
+| **Geographic Evolution** | Regional race distribution · Spherical center of gravity (interactive decade slider) |
+| **Nationality & Talent** | Driver vs constructor nationality diversification (Q2.1) · Regional talent influx (Q2.2) |
+| **Competition Dynamics** | Avg races per driver per team (Q2.4) · Win dominance heatmaps (Q3.1) |
+| **Performance & Demographics** | Pit-stop pace evolution (Q3.3) · Driver age by decade (Q4.1) |
